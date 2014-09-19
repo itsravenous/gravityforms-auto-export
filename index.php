@@ -6,7 +6,10 @@
 
 // Dependencies
 require('export-class.php');
+
+// Config
 require('../wp-config.php');
+require('./config.php');
 
 $db = array(
 	'host' => DB_HOST,
@@ -21,10 +24,6 @@ $exporter = new rv_gravity_export(array(
 ));
 
 // Export form entries
-$export_options = array(
-	'form_id' => 1,
-);
-$exporter->export_entries($export_options);
-
+$exporter->export_entries($config);
 
 ?>
