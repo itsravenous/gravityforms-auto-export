@@ -94,19 +94,19 @@ Class rv_gravity_export {
 		$csv_header[] = 'User Agent';
 
 		// Build filename
-		$filename = 'export-'.date('Y-m-d').'.csv';
+		$filename = 'export/export-'.date('Y-m-d-H-i-s').'.csv';
 
 		// Write to buffer
-		$output = fopen("php://output",'w') or die("Can't open php://output");
-		header("Content-Type:application/csv"); 
-		header("Content-Disposition:attachment;filename=$filename"); 
+		$output = fopen($filename, 'w') or die("Can't open $filename");
 		fputcsv($output, $csv_header);
 		foreach($csv_rows as $row) {
 		    fputcsv($output, $row);
 		}
 
 		// Serve buffer as download
-		fclose($output) or die("Can't close php://output");
+		fclose($output) or die("Can't close $filename");
+
+		return $filename;
 		
 	}
 
