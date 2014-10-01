@@ -24,62 +24,49 @@ Class rv_gravity_export {
 		$csv_rows = array();
 		foreach ($entries as $entry) {
 			$csv_row = array();
-			$in_checkbox = FALSE;
+
 			foreach ($fields as $field) {
+				// Skip separator field
+				if($field['type'] == 'section' || $field['type'] == 'page') continue;
+
 				$ids = array();
 				if ($field['inputs']) {
-					foreach ($field['inputs'] as $input) {
+					foreach ($field['inputs'] as &$input) {
 						$ids[] = $input['id'];
+						$input['label'] = $field['label'] . ' (' . $input['label'] . ')';
 					}
 				} else {
 					$ids = array($field['id']);
 				}
 
-				if (!$in_checkbox) {
-					// Get value for field from entry
-					if ($field['type'] == 'checkbox') {
-						// Get value for field from entry
-						$values = array();
-						foreach ($ids as $id) {
-							$value = array_filter($entry->values, function ($val) use($id) {
-								return (string) $val->field_id == (string) $id;
-							});
-							if (empty($value)) {
-								$values[] = '-';
-							} else {
-								$value_reduced = end($value);
-								$values[] = $value_reduced->value;
-							}
-						}
-						$csv_row[] = str_replace('-; ', '', str_replace('; -', '', implode('; ', $values)));
+				// Get value for field from entry
+				foreach ($ids as $id) {
+					$value = array_filter($entry->values, function ($val) use($id) {
+						return (string) $val->field_id == (string) $id;
+					});
+					if (empty($value)) {
+						$value = '';
 					} else {
-						foreach ($ids as $id) {
-							$value = array_filter($entry->values, function ($val) use($id) {
-								return (string) $val->field_id == (string) $id;
-							});
-							if (empty($value)) {
-								$value = '-';
-							} else {
-								$value = end($value);
-								$value = $value->value;
-							}
-
-							$csv_row[] = $value;
-						}
+						$value = end($value);
+						$value = $value->value;
 					}
-				} else {
-					$csv_row[] = '-';
-				}
 
-				// Skip inner checkbox fields - we aggregate values from parent
-				$in_checkbox = ($field['type'] == 'checkbox' && count($field['inputs']) > 1) || ($in_checkbox && strpos($ids[0], '.') !== FALSE);
+					$csv_row[] = $value;
+				}
 			}
 
 			// Add entry meta
+			$csv_row[] = $entry->created_by;
+			$csv_row[] = $entry->id;
 			$csv_row[] = $entry->date_created;
-			$csv_row[] = $entry->ip;
 			$csv_row[] = $entry->source_url;
+			$csv_row[] = $entry->transaction_id;
+			$csv_row[] = $entry->payment_amount;
+			$csv_row[] = $entry->payment_date;
+			$csv_row[] = $entry->payment_status;
+			$csv_row[] = $entry->post_id;
 			$csv_row[] = $entry->user_agent;
+			$csv_row[] = $entry->ip;
 
 			$csv_rows[]= $csv_row;
 		}
@@ -88,10 +75,17 @@ Class rv_gravity_export {
 		$csv_header = rv_gravity::get_form_labels_by_id($form_id);
 
 		// Add meta fields to header
-		$csv_header[] = 'Date submitted';
-		$csv_header[] = 'IP Address';
-		$csv_header[] = 'Source URL';
+		$csv_header[] = 'Created By (User Id)';
+		$csv_header[] = 'Entry Id';
+		$csv_header[] = 'Entry date';
+		$csv_header[] = 'Source Url';
+		$csv_header[] = 'Transaction Id';
+		$csv_header[] = 'Payment Amount';
+		$csv_header[] = 'Payment Date';
+		$csv_header[] = 'Payment Status';
+		$csv_header[] = 'Post Id';
 		$csv_header[] = 'User Agent';
+		$csv_header[] = 'User IP';
 
 		// Build filename
 		$filename = 'export/export-'.date('Y-m-d-H-i-s').'.csv';

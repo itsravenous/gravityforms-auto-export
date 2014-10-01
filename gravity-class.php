@@ -46,9 +46,16 @@ Class rv_gravity {
 
 		$labels_by_id = array();
 		foreach($fields as $field) {
-			if ($field['inputs'] && $field['type'] != 'checkbox') {
+			// Skip separator fields
+			if ($field['type'] == 'section' || $field['type'] == 'page') continue;
+
+			if ($field['inputs']) {
 				foreach ($field['inputs'] as $input) {
-					$labels_by_id[(string) $input['id']] = $input['label'];
+					if ($field['type'] == 'checkbox') {
+						$labels_by_id[(string) $input['id']] = $input['label'];
+					} else {
+						$labels_by_id[(string) $input['id']] = $field['label'] . ' (' . $input['label'] . ')';
+					}
 				}
 			} else {
 				$labels_by_id[(string) $field['id']] = $field['label'];
