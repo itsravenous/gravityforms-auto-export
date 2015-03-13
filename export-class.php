@@ -9,9 +9,7 @@ require('./gravity-class.php');
 Class rv_gravity_export {
 
 	public function __construct ($options) {
-		// Setup DB connection
-		mysql_connect($options['db']['host'], $options['db']['user'], $options['db']['password']);
-		mysql_select_db($options['db']['name']);
+		
 	}
 	
 	public function export_entries($options) {
@@ -27,16 +25,16 @@ Class rv_gravity_export {
 
 			foreach ($fields as $field) {
 				// Skip separator field
-				if($field['type'] == 'section' || $field['type'] == 'page') continue;
+				if($field->type == 'section' || $field->type == 'page') continue;
 
 				$ids = array();
-				if ($field['inputs']) {
-					foreach ($field['inputs'] as &$input) {
-						$ids[] = $input['id'];
-						$input['label'] = $field['label'] . ' (' . $input['label'] . ')';
+				if ($field->inputs) {
+					foreach ($field->inputs as &$input) {
+						$ids[] = $input->id;
+						$input->label = $field->label . ' (' . $input->label . ')';
 					}
 				} else {
-					$ids = array($field['id']);
+					$ids = array($field->id);
 				}
 
 				// Get value for field from entry

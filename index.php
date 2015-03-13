@@ -26,6 +26,7 @@ $exporter = new rv_gravity_export(array(
 
 // Export form entries to CSV file
 $csv_file = $exporter->export_entries($config);
+die;
 
 // Email CSV to addresses defined in config
 $mail = new PHPMailer;
