@@ -7,8 +7,14 @@
 $config = array(
 	'wp_root' => '../',
 	'form_id' => 1,
-	'recipients' => array(
+	'mail' => array(
+		'host' => '',
+		'from' => '',
+		'from_name' => '',
+		'subject' => '',
+		'recipients' => array(
 	
-	),
+		),
+	)
 );
 ?>
