@@ -5,6 +5,7 @@
  */
 
 $config = array(
+	'wp_root' => '../',
 	'form_id' => 1,
 	'recipients' => array(
 	

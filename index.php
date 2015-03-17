@@ -9,8 +9,8 @@ require('export-class.php');
 require('lib/mail/class.phpmailer.php');
 
 // Config
-require('../wp-config.php');
 require('./config.php');
+require($config['wp_root'].'/wp-config.php');
 
 $db = array(
 	'host' => DB_HOST,
