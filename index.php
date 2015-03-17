@@ -31,15 +31,15 @@ $csv_file = $exporter->export_entries($options);
 
 // Email CSV to addresses defined in config
 $mail = new PHPMailer;
-$mail->Host = "mail.grantuk.com";
-$mail->From	= "service@grantuk.com";
-$mail->FromName ="grantuk.com";
+$mail->Host = $config['mail']['host'];
+$mail->From	= $config['mail']['from'];
+$mail->FromName = $config['mail']['from_name'];
 
-foreach ($config['recipients'] as $recipient) {
+foreach ($config['mail']['recipients'] as $recipient) {
 	$mail->AddAddress($recipient);
 }
 $mail->IsHTML(true);
-$mail->Subject = "Export from product registration form";
+$mail->Subject = $config['mail']['subject'];
 $mail->AddAttachment($csv_file);
 $mail->Body = "Please find attacted file $csv_file.";
 
