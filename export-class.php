@@ -21,6 +21,13 @@ Class rv_gravity_export {
 
 		$csv_rows = array();
 		foreach ($entries as $entry) {
+			// Enforce date range option
+			if (!empty($options['date_from'])) {
+				$entry_timestamp = strtotime($entry->date_created);
+				if ($entry_timestamp < $options['date_from']) {
+					continue;
+				}
+			}
 			$csv_row = array();
 
 			foreach ($fields as $field) {
