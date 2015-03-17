@@ -6,5 +6,8 @@
 
 $config = array(
 	'form_id' => 1,
+	'recipients' => array(
+	
+	),
 );
 ?>
