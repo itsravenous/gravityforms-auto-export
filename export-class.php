@@ -78,7 +78,7 @@ Class rv_gravity_export {
 		
 		// Format CSV header from fields array
 		$csv_header = array('id');
-		$cav_header = array_merge($csv_header, rv_gravity::get_form_labels_by_id($form_id));
+		$csv_header = array_merge($csv_header, rv_gravity::get_form_labels_by_id($form_id));
 
 		// Add meta fields to header
 		$csv_header[] = 'Created By (User Id)';
