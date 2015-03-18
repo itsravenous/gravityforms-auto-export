@@ -4,14 +4,14 @@
  * @author Tom Jenkins tom@itsravenous.com
  */
 
-require('./gravity-class.php');
+require_once('./gravity-class.php');
 
 Class rv_gravity_export {
 
 	public function __construct ($options) {
 		
 	}
-	
+
 	public function export_entries($options) {
 
 		$form_id = $options['form_id'];
@@ -28,7 +28,7 @@ Class rv_gravity_export {
 					continue;
 				}
 			}
-			$csv_row = array();
+			$csv_row = array($entry->id);
 
 			foreach ($fields as $field) {
 				// Skip separator field
@@ -77,7 +77,8 @@ Class rv_gravity_export {
 		}
 		
 		// Format CSV header from fields array
-		$csv_header = rv_gravity::get_form_labels_by_id($form_id);
+		$csv_header = array('id');
+		$cav_header = array_merge($csv_header, rv_gravity::get_form_labels_by_id($form_id));
 
 		// Add meta fields to header
 		$csv_header[] = 'Created By (User Id)';
@@ -93,7 +94,7 @@ Class rv_gravity_export {
 		$csv_header[] = 'User IP';
 
 		// Build filename
-		$filename = 'export/export-'.date('Y-m-d-H-i-s').'.csv';
+		$filename = 'export/'.str_replace(' ', '-', $form->title).'-export-'.date('Y-m-d-H-i-s').'.csv';
 
 		// Write to buffer
 		$output = fopen($filename, 'w') or die("Can't open $filename");
