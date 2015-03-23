@@ -21,6 +21,15 @@ Class rv_gravity_export {
 
 		$csv_rows = array();
 		foreach ($entries as $entry) {
+
+			// Enforce date range option
+			if (!empty($options['date_from'])) {
+				$entry_timestamp = strtotime($entry->date_created);
+				if ($entry_timestamp < $options['date_from']) {
+					continue;
+				}
+			}
+			
 			$csv_row = array();
 			$in_checkbox = FALSE;
 			foreach ($fields as $field) {
@@ -91,7 +100,6 @@ Class rv_gravity_export {
 		// Format CSV header from fields array
 		$csv_header = rv_gravity::get_form_labels_by_id($form_id, array(
 			'show_sections' => TRUE,
-			'remove_toplevel_field_labels' => TRUE,
 		));
 
 		// Add meta fields to header
