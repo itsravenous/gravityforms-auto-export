@@ -26,6 +26,7 @@ Class rv_gravity_export {
 			foreach ($fields as $field) {
 
 				if ($field->type == 'section' || $field->type == 'page') {
+					$csv_row[] = '-';
 					continue;
 				}
 
@@ -88,7 +89,10 @@ Class rv_gravity_export {
 		}
 		
 		// Format CSV header from fields array
-		$csv_header = rv_gravity::get_form_labels_by_id($form_id);
+		$csv_header = rv_gravity::get_form_labels_by_id($form_id, array(
+			'show_sections' => TRUE,
+			'remove_toplevel_field_labels' => TRUE,
+		));
 
 		// Add meta fields to header
 		$csv_header[] = 'Date submitted';

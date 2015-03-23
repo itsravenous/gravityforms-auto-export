@@ -37,7 +37,12 @@ Class rv_gravity {
 		return $values;
 	}
 
-	public static function get_form_labels_by_id($form_id, $expand_checkboxes = FALSE) {
+	public static function get_form_labels_by_id($form_id, $options = array()) {
+		// Parse options
+		$expand_checkboxes = !empty($options['expand_checkboxes']);
+		$show_sections = !empty($options['show_sections']);
+		$remove_toplevel_field_labels = !empty($options['remove_toplevel_field_labels']);
+
 		// Get fields
 		$fields = self::get_form_fields($form_id);
 
@@ -46,7 +51,7 @@ Class rv_gravity {
 			$in_checkbox = FALSE;
 
 			// Skip separator fields
-			if ($field->type == 'section' || $field->type == 'page') continue;
+			if (!$show_sections && ($field->type == 'section' || $field->type == 'page')) continue;
 
 			if ($field->inputs) {
 				foreach ($field->inputs as $input) {
@@ -56,7 +61,7 @@ Class rv_gravity {
 						$in_checkbox = true;
 					} else {
 						$in_checkbox = false;
-						$labels_by_id[(string) $input->id] = $field->label . ' (' . $input->label . ')';
+						$labels_by_id[(string) $input->id] = $remove_toplevel_field_labels ? $input->label : $field->label . ' (' . $input->label . ')';
 					}
 				}
 			} else {
