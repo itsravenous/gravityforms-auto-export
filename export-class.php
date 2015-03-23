@@ -30,7 +30,7 @@ Class rv_gravity_export {
 				}
 			}
 			
-			$csv_row = array();
+			$csv_row = array($entry->id);
 			$in_checkbox = FALSE;
 			foreach ($fields as $field) {
 
@@ -98,9 +98,10 @@ Class rv_gravity_export {
 		}
 		
 		// Format CSV header from fields array
-		$csv_header = rv_gravity::get_form_labels_by_id($form_id, array(
+		$csv_header = array('id');
+		$csv_header = array_merge($csv_header, rv_gravity::get_form_labels_by_id($form_id, array(
 			'show_sections' => TRUE,
-		));
+		)));
 
 		// Add meta fields to header
 		$csv_header[] = 'Date submitted';
