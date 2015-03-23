@@ -37,20 +37,25 @@ Class rv_gravity {
 		return $values;
 	}
 
-	public static function get_form_labels_by_id($form_id) {
+	public static function get_form_labels_by_id($form_id, $expand_checkboxes = FALSE) {
 		// Get fields
 		$fields = self::get_form_fields($form_id);
 
 		$labels_by_id = array();
 		foreach($fields as $field) {
+			$in_checkbox = FALSE;
+
 			// Skip separator fields
 			if ($field->type == 'section' || $field->type == 'page') continue;
 
 			if ($field->inputs) {
 				foreach ($field->inputs as $input) {
 					if ($field->type == 'checkbox') {
-						$labels_by_id[(string) $input->id] = $input->label;
+						if ($in_checkbox && !$expand_checkboxes) continue;
+						$labels_by_id[(string) $field->id] = $field->label;
+						$in_checkbox = true;
 					} else {
+						$in_checkbox = false;
 						$labels_by_id[(string) $input->id] = $field->label . ' (' . $input->label . ')';
 					}
 				}
