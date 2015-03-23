@@ -41,7 +41,7 @@ foreach ($config['mail']['recipients'] as $recipient) {
 $mail->IsHTML(true);
 $mail->Subject = $config['mail']['subject'];
 $mail->AddAttachment($csv_file);
-$mail->Body = "Please find attacted file $csv_file.";
+$mail->Body = "Please find attached file $csv_file.";
 
 if($mail->Send()){
 	echo 'mail sent';
